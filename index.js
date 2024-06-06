@@ -1,13 +1,19 @@
 const express = require("express");
-const app = express();
-const port = 3000;
+const cors = require("cors");
 const CulinaryRouter = require("./routes/Culinary");
+
+const app = express();
+
+const port = 3000;
+
 app.use(express.json());
 app.use(
   express.urlencoded({
     extended: true,
   })
 );
+app.use(cors());
+
 app.get("/", (req, res) => {
   res.json({ message: "Kukuliner endpoint API" });
 });
