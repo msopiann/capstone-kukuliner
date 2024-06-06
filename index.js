@@ -9,7 +9,7 @@ app.use(
   })
 );
 app.get("/", (req, res) => {
-  res.json({ message: "ok" });
+  res.json({ message: "Kukuliner endpoint API" });
 });
 app.use("/api/culinary", CulinaryRouter);
 /* Error handler middleware */
@@ -23,3 +23,5 @@ app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
   console.log("To stop server, press CTRL + C");
 });
+
+module.exports = app;
