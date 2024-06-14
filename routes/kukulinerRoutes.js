@@ -17,11 +17,12 @@ router.get("/recommendations", async (req, res) => {
     const formattedResponse = {
       listKuliner: data.map((place) => ({
         id: place.id.toString(),
-        nama: place.nama,
-        alamat: place.alamat,
+        name: place.nama,
+        description: place.description,
+        photoUrl: place.photoUrl,
+        estimatePrice: place.estimatePrice,
         lat: place.lat,
         lon: place.lon,
-        distance: place.distance,
       })),
     };
 
@@ -39,8 +40,10 @@ router.get("/", async function (req, res, next) {
     const formattedResponse = {
       listKuliner: data.map((place) => ({
         id: place.id.toString(),
-        nama: place.nama,
-        alamat: place.alamat,
+        name: place.nama,
+        description: place.description,
+        photoUrl: place.photoUrl,
+        estimatePrice: place.estimatePrice,
         lat: place.lat,
         lon: place.lon,
       })),
@@ -62,8 +65,10 @@ router.get("/:id", async function (req, res, next) {
     const formattedResponse = {
       listKuliner: data.map((place) => ({
         id: place.id.toString(),
-        nama: place.nama,
-        alamat: place.alamat,
+        name: place.nama,
+        description: place.description,
+        photoUrl: place.photoUrl,
+        estimatePrice: place.estimatePrice,
         lat: place.lat,
         lon: place.lon,
       })),
@@ -85,8 +90,10 @@ router.get("/search/:name", async function (req, res, next) {
     const formattedResponse = {
       listKuliner: data.map((place) => ({
         id: place.id.toString(),
-        nama: place.nama,
-        alamat: place.alamat,
+        name: place.nama,
+        description: place.description,
+        photoUrl: place.photoUrl,
+        estimatePrice: place.estimatePrice,
         lat: place.lat,
         lon: place.lon,
       })),
