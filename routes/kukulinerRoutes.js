@@ -21,6 +21,7 @@ router.get("/recommendations", async (req, res) => {
         alamat: place.alamat,
         lat: place.lat,
         lon: place.lon,
+        distance: place.distance,
       })),
     };
 

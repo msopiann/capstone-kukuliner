@@ -47,7 +47,7 @@ async function getDistanceFromAPI(userLat, userLng, placeLat, placeLng) {
 
 async function getUserRecommendation(userLatitude, userLongitude) {
   const rows = await db.query(`
-    SELECT * FROM listKuliner;
+    SELECT * FROM mytable;
   `);
 
   const recommendations = [];
@@ -70,12 +70,12 @@ async function getUserRecommendation(userLatitude, userLongitude) {
 }
 
 async function getAllData() {
-  const rows = await db.query("SELECT * FROM listKuliner");
+  const rows = await db.query("SELECT * FROM mytable");
   return rows;
 }
 
 async function getSingleData(id) {
-  const row = await db.query(`SELECT * FROM listKuliner WHERE id = ?`, [id]);
+  const row = await db.query(`SELECT * FROM mytable WHERE id = ?`, [id]);
 
   // If data is empty, return an error or handle it as per your requirement
   if (!row) {
@@ -86,7 +86,7 @@ async function getSingleData(id) {
 }
 
 async function getDataByName(name) {
-  const rows = await db.query(`SELECT * FROM listKuliner WHERE nama LIKE ?`, [
+  const rows = await db.query(`SELECT * FROM mytable WHERE nama LIKE ?`, [
     `%${name}%`,
   ]);
 
