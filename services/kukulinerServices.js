@@ -1,0 +1,111 @@
+const db = require("./databaseConnection");
+const axios = require("axios");
+
+async function getUserRecommendation(userLatitude, userLongitude) {
+  const rows = await db.query(`
+    SELECT * FROM listKuliner;
+  `);
+
+  const recommendations = [];
+
+  for (const place of rows) {
+    const distance = await getDistanceFromAPI(
+      userLatitude,
+      userLongitude,
+      place.lat,
+      place.lon
+    );
+    // Jarak maksimal 20 KM
+    if (distance <= 20000) {
+      recommendations.push({ ...place, distance });
+    }
+  }
+
+  recommendations.sort((a, b) => a.distance - b.distance);
+  return recommendations.slice(0, 10);
+}
+
+async function getDistanceFromAPI(userLat, userLng, placeLat, placeLng) {
+  const apiKey = process.env.GMAPS_API;
+  const baseUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?";
+  const origin = `${userLat},${userLng}`;
+  const destination = `${placeLat},${placeLng}`;
+  const travelMode = "driving"; // Replace with desired travel mode
+
+  const url = `${baseUrl}origins=${origin}&destinations=${destination}&travelMode=${travelMode}&key=${apiKey}`;
+
+  const response = await axios.get(url);
+  const distance = response.data.rows[0].elements[0].distance.value; // Parse distance from response
+  return distance;
+}
+
+async function getMultiple() {
+  const rows = await db.query("SELECT * FROM listKuliner");
+  return rows;
+}
+
+async function getSingle(id) {
+  const row = await db.query(`SELECT * FROM listKuliner WHERE id = ?`, [id]);
+
+  // If data is empty, return an error or handle it as per your requirement
+  if (!row) {
+    throw new Error("Culinary not found");
+  }
+
+  return row;
+}
+
+async function create(table) {
+  const result = await db.query(
+    `INSERT INTO listKuliner 
+      (name, alamat, lat, lon) 
+      VALUES 
+      ('${table.name}', '${table.alamat}', ${table.lat}, ${table.lon})`
+  );
+
+  let message = "Error in creating culinary";
+
+  if (result.affectedRows) {
+    message = "Culinary created successfully";
+  }
+
+  return { message };
+}
+
+async function update(id, culinary) {
+  const result = await db.query(
+    `UPDATE listKuliner
+    SET name="${culinary.name}", alamat="${culinary.alamat}", 
+    lat=${culinary.lat}, lon=${culinary.lon} 
+    WHERE id=${id}`
+  );
+
+  let message = "Error in updating culinary";
+
+  if (result.affectedRows) {
+    message = "Culinary updated successfully";
+  }
+
+  return { message };
+}
+
+async function remove(id) {
+  const result = await db.query(`DELETE FROM listKuliner WHERE id=${id}`);
+
+  let message = "Error in deleting culinary";
+
+  if (result.affectedRows) {
+    message = "Culinary deleted successfully";
+  }
+
+  return { message };
+}
+
+module.exports = {
+  getUserRecommendation,
+  getMultiple,
+  getSingle,
+  create,
+  update,
+  remove,
+};
