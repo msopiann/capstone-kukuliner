@@ -23,7 +23,6 @@ router.get("/recommendations", async (req, res) => {
         estimatePrice: place.estimatePrice,
         lat: place.lat,
         lon: place.lon,
-        distance: place.distance,
       })),
     };
 
