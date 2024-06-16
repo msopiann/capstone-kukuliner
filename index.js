@@ -4,8 +4,6 @@ const CulinaryRouter = require("./routes/kukulinerRoutes");
 
 const app = express();
 
-const port = 3000;
-
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -15,8 +13,9 @@ app.use(
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.json({ message: "Kukuliner endpoint API" });
+  res.json({ message: "Kukuliner endpoint API using Express" });
 });
+
 app.use("/api/culinary", CulinaryRouter);
 /* Error handler middleware */
 app.use((err, req, res, next) => {
@@ -25,6 +24,9 @@ app.use((err, req, res, next) => {
   res.status(statusCode).json({ message: err.message });
   return;
 });
+
+const port = parseInt(process.env.PORT) || 8080;
+
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
   console.log("To stop server, press CTRL + C");

@@ -21,10 +21,18 @@ async function getDistanceFromAPI(userLat, userLng, placeLat, placeLng) {
         "Missing origin or destination in API response:",
         response.data
       );
-      return 0;
+      return null;
     }
 
     const distanceElement = response.data.rows[0].elements[0];
+    if (distanceElement.status === "ZERO_RESULTS") {
+      console.error(
+        "No results found for the given coordinates:",
+        response.data
+      );
+      return null;
+    }
+
     if (
       !distanceElement ||
       !distanceElement.distance ||
@@ -34,7 +42,7 @@ async function getDistanceFromAPI(userLat, userLng, placeLat, placeLng) {
         "Missing distance information in API response:",
         response.data
       );
-      return 0;
+      return null;
     }
 
     const distance = distanceElement.distance.value;
@@ -60,7 +68,7 @@ async function getUserRecommendation(userLatitude, userLongitude) {
       place.lon
     );
     // Jarak maksimal 20 KM
-    if (distance <= 20000) {
+    if (distance !== null && distance <= 20000) {
       recommendations.push({ ...place, distance });
     }
   }
